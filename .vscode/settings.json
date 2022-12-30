@@ -1,0 +1,29 @@
+{
+  "python.linting.flake8Enabled": true,
+  "python.linting.enabled": true,
+  "python.formatting.provider": "black",
+  "python.formatting.blackArgs": ["-l", "120"],
+  "python.linting.pylintEnabled": false,
+  "python.linting.pycodestyleEnabled": false,
+  "python.linting.flake8Args": [
+    "--ignore=E203",
+    "--ignore=E266",
+    "--select = B,C,E,F,W,T4,B9",
+    "--ignore=E501",
+    "--ignore=W503",
+    "--max-line-length=128",
+    "--max-complexity = 18"
+  ],
+  "python.sortImports.args": ["--profile", "black", "-l", "120"],
+  "editor.formatOnSave": true,
+  "editor.showUnused": true,
+  "[python]": {
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": true
+    }
+  },
+  "python.analysis.completeFunctionParens": true,
+  "files.exclude": {
+    "**/__pycache__": true
+  }
+}
