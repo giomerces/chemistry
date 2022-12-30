@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "drf_spectacular",
     "django_extensions",
     "django_filters",
     "rest_framework",
@@ -78,28 +79,36 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "chemistry.wsgi.application"
 
+REST_FRAMEWORK = {
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+}
+
+SPECTACULAR_SETTINGS = {
+    "TITLE": "Chemistry",
+    "DESCRIPTION": "Chemical Reaction Calculator",
+    "VERSION": "1.0.0",
+}
+
+load_dotenv()
+
 try:
     ssm = boto3.client(
-    "ssm",
-    region_name=os.environ["AWS_DEFAULT_REGION"],
-    aws_access_key_id=os.environ["AWS_ACCESS_KEY_ID"],
-    aws_secret_access_key=os.environ["AWS_SECRET_ACCESS_KEY"],
+        "ssm",
+        region_name=os.environ["AWS_DEFAULT_REGION"],
+        aws_access_key_id=os.environ["AWS_ACCESS_KEY_ID"],
+        aws_secret_access_key=os.environ["AWS_SECRET_ACCESS_KEY"],
     )
-
-    load_dotenv()
-
 
     def _get_ssm_key(name):
         key = ssm.get_parameter(Name=name, WithDecryption=True)
         return key["Parameter"]["Value"]
-
 
     os.environ["DATABASE_USERNAME"] = _get_ssm_key("/dev/django/DATABASE_USERNAME")
     os.environ["DATABASE_PASSWORD"] = _get_ssm_key("/dev/django/DATABASE_PASSWORD")
     os.environ["DATABASE_HOST"] = _get_ssm_key("/dev/django/DATABASE_HOST")
     os.environ["DATABASE_PORT"] = _get_ssm_key("/dev/django/DATABASE_PORT")
 except Exception:
-    #env variables
+    # env variables
     pass
 
 
