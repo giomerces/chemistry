@@ -1,4 +1,5 @@
 from decimal import Decimal
+from typing import List
 
 from compounds.models import Compound
 from compounds.serializers import CompoundCalculatedSerializer
@@ -51,7 +52,7 @@ class Reaction(ChemistryModelMixin, BaseNameMixin):
         return getattr(self, f"calculate_based_on_{method}")(**kwargs)
 
     def calculate_based_on_mass(
-        self, product: Compound, target_amount: Decimal, origin_coordinates: list[Decimal], **kwargs
+        self, product: Compound, target_amount: Decimal, origin_coordinates: List[Decimal], **kwargs
     ) -> list[CompoundCalculatedSerializer]:
         initial_mass = self.participants_stoichiometry.get(product) * product.molar_mass
         proportion = target_amount / initial_mass

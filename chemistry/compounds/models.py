@@ -1,4 +1,5 @@
 from decimal import Decimal
+from typing import List
 
 from compounds.models_manager import CompoundQuerySet, CompoundStoreQuerySet
 from compounds.validators import gps_coordinates_validator
@@ -33,8 +34,8 @@ class Compound(ChemistryModelMixin, BaseNameMixin):
         self,
         amount: Decimal,
         normalized_price: Decimal,
-        origin_coordinates: list[Decimal],
-        coordinates: list[Decimal],
+        origin_coordinates: List[Decimal],
+        coordinates: List[Decimal],
         shipping_cost_by_km: Decimal,
         store: str,
     ) -> dict:
