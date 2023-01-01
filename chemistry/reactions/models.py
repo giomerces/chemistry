@@ -53,7 +53,7 @@ class Reaction(ChemistryModelMixin, BaseNameMixin):
 
     def calculate_based_on_mass(
         self, product: Compound, target_amount: Decimal, origin_coordinates: List[Decimal], **kwargs
-    ) -> list[CompoundCalculatedSerializer]:
+    ) -> List[CompoundCalculatedSerializer]:
         initial_mass = self.participants_stoichiometry.get(product) * product.molar_mass
         proportion = target_amount / initial_mass
         required_reagents = CompoundCalculatedSerializer(
