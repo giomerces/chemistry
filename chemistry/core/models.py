@@ -8,7 +8,13 @@ class BaseTimestampedModel(models.Model):
     class Meta:
         abstract = True
 
+class BaseNameMixin(models.Model):
+    name = models.CharField(max_length=50)
+    class Meta:
+        abstract = True
+        
 class ChemistryModelMixin(BaseTimestampedModel):
 
     class Meta:
         abstract = True
+

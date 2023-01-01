@@ -1,21 +1,38 @@
-from compounds.models import Compound
-from django.db.models import BooleanField, Count, Q
-from django.db.models.functions import Cast
-from django_filters import BooleanFilter, CharFilter, FilterSet
+from compounds.models import Compound, CompoundStore, Store
+from django_filters import BooleanFilter, CharFilter, FilterSet, RangeFilter
 
 
 class CompoundFilterSet(FilterSet):
-    name_contains = CharFilter(field_name="name", lookup_expr=["contains"])
+    name_icontains = CharFilter(field_name="name", lookup_expr=["icontains"])
     phase_at_room_temperature_eq = CharFilter(field_name="phase_at_room_temperature")
-    available_on_store_eq = BooleanFilter(field_name="stores", method="_count_many_to_many")
+    available_on_stores_eq = BooleanFilter(field_name="stores", method="_available_on_stores")
 
-    def _count_many_to_many(self, queryset, name, value):
-        return (
-            queryset.annotate(count=Count(name))
-            .annotate(available=Cast(Q(count__gt=0), BooleanField()))
-            .filter(available=value)
-        )
+    def _available_on_stores(self, queryset, name, value):
+        return queryset.with_available_on_stores().filter(available=value)
 
     class Meta:
         model = Compound
-        fields = ["name_contains", "phase_at_room_temperature_eq", "available_on_store_eq"]
+        fields = ["name_icontains", "phase_at_room_temperature_eq", "available_on_stores_eq"]
+
+
+class StoreFilterSet(FilterSet):
+    name_icontains = CharFilter(field_name="name", lookup_expr=["icontains"])
+    address_icontains = CharFilter(field_name="address", lookup_expr=["icontains"])
+    shipping_cost_by_km = RangeFilter()
+    min_purchase = RangeFilter()
+
+    class Meta:
+        model = Store
+        fields = ["name_icontains", "address_icontains", "shipping_cost_by_km", "min_purchase"]
+
+
+class CompoundStoreFilterSet(FilterSet):
+    compound_icontains = CharFilter(field_name="compound__name", lookup_expr=["icontains"])
+    store_icontains = CharFilter(field_name="store__name", lookup_expr=["icontains"])
+    unit_price = RangeFilter()
+    unit_eq = CharFilter(field_name="unit")
+    available_eq = BooleanFilter(field_name="available")
+
+    class Meta:
+        model = CompoundStore
+        fields = ["compound_icontains", "store_icontains", "unit_price", "unit_eq", "available_eq"]
