@@ -8,3 +8,4 @@ as well.
 The application was deployed on AWS EC2 instance, using Nginx and Gunicorn. You can try it out using EC2 IP adress: http://18.231.30.103. 
 For now, the deploy is happening manually, but I am studying a bit more to understand how to create a domain with certbot to finish my deploy
 automation.
+You can see API swagger using /api/schema/swagger-ui/.
